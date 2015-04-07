@@ -54,13 +54,51 @@ console.log(grid.isInside("lol")); // is it a good time to start hating JS? */
 // The World
 
 function elementFromChar(legend, ch){
+// Tutorial: A legend is an object that tells us what each character in the map means
 	if (ch == " ") {return null;};
 	var element = new legend[ch]();
 	element.originChar = ch;
 	return element;
 }
+/* Tutorial: In elementFromChar, first we create an instance
+ of the right type by looking up the character’s constructor
+  and applying new to it. Then we add an originChar property 
+  to it to make it easy to find out what character the element 
+  was originally created from.
 
+We need this originChar property when implementing the world’s 
+toString method. This method builds up a maplike string from 
+the world’s current state by performing a two-dimensional loop 
+over the squares on the grid.
+*/
+function charFromElement(element){
+	if (element == null) return " ";
+	else return element.originChar;
+}
+function World(map, legend){
+	var grid = new Grid(map[0].length, map.length);
+	this.grid = grid;
+	this.legend = legend;
 
+	map.forEach(function(line, y){
+		for (var x=0; x<line.length; x++){
+			grid.set(new Vector(x, y), elementFromChar(legend, line[x]));
+		}
+	});
+}
+World.prototype.toString = function(){
+	var output = "";
+	for (var y = 0; y<this.grid.height; y++){
+		for (var x=0; x<this.grid.width; x++){
+			var element = this.grid.get(new Vector(x,y));
+			output += charFromElement(element);
+		}
+		output += "\n";
+	}
+	return output;
+};
+function Wall(){};
+// Tutorial: A wall is a simple object—it is used only for taking up space and has no act method.
 var directions = {
 	"n":  new Vector( 0, -1),
 	"ne": new Vector( 1, -1),
@@ -89,3 +127,7 @@ BouncingCritter.prototype.act = function(view){
 	}
 	return {type: "move", direction: this.direction};
 }
+
+var world = new World (plan,   {"#": Wall,
+								"o": BouncingCritter});
+console.log(world.toString());
