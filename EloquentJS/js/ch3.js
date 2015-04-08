@@ -81,11 +81,11 @@ elegant use of the || operator.
 
 
 /*Chess board*/
+/*Stupid variant*/
 console.log("Chess");
 var string="";
 for (var i=0; i<8; i++){
 	if( (i==0) || (i % 2 == 0) ){
-
 		var tmp = "# # # # \n";
 	} else{
 		tmp = " # # # #\n";
@@ -95,11 +95,17 @@ for (var i=0; i<8; i++){
 }
 console.log(string);
 
-			/*var a="";
-			for (var i=0; i<8; i++){
-				for (var j=0; j<8; j++){
-
-				}
-				var a+="/n";
-			}
-			*/
+/* From the tutorial: To know whether to put a space or a hash sign at a given position, 
+you could test whether the sum of the two counters is even (% 2). */
+console.log("Chess");
+var width  = Number(prompt("Enter width", ""));
+var height = Number(prompt("Enter height", ""));
+var string = "";
+for (var i=0; i<height; i++){
+	for (var j=0; j<width; j++){
+		if ((i+j)%2==0){string+=" ";}
+		else {string+="#";}
+	};
+	string+="\n";
+};
+console.log(string);
