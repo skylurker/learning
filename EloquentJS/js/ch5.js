@@ -52,6 +52,36 @@ function range2(start, end){
 	}
 	return arr;
 }
+console.log("Range");
 console.log(range(1, 10));
 console.log(sum(range(1, 10)));
 console.log(range2(1, 10, 2));
+
+
+/* Reversing an array
+
+Arrays have a method reverse, which changes
+the array by inverting the order in which its
+elements appear. For this exercise, write 
+two functions, reverseArray and reverseArrayInPlace. 
+The first, reverseArray, takes an array as 
+argument and produces a new array that has the 
+same elements in the inverse order.*/
+
+function reverseArray(input){
+	var output = [];
+	for (var i=0; i<input.length; i++){
+		output.unshift(input[i]);
+	}
+	return output;
+}
+function reverseArray2(input){
+	var output = [];
+	for (var i=input.length-1; i>=0; i--){
+		output.push(input[i]);
+	}
+	return output;
+}
+console.log("Reverse array");
+console.log(reverseArray(["A", "B", "C"]));
+console.log(reverseArray2(["A", "B", "C"]));
