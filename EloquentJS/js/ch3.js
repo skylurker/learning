@@ -14,29 +14,30 @@ Write a loop that makes seven calls to console.log to output the following trian
 
 
 /*For*/
-console.log("The triangle: FOR\n");
+console.log("The triangle: FOR");
 var a="";
 for(var i=0; i<7; i++){
 	a+="#";
 	console.log(a);
 }
 /*While*/
-console.log("The triangle: WHILE\n");
+console.log("The triangle: WHILE");
 var a="";
 while(a.length<7){
 	a+="#";
 	console.log(a);
 }
 /*Do while*/
-console.log("The triangle: DO WHILE\n");
+console.log("The triangle: DO WHILE");
 var a="";
 do {
 	a+="#";
 	console.log(a);
 } while (a.length<7);		
-
-
-
+/*Answers*/
+console.log("The triangle: Answers");
+for (var line = "#"; line.length < 8; line+="#")
+	console.log(line);
 
 
 
