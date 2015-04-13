@@ -19,6 +19,14 @@ console.log("Minimum");
 console.log(min(0, 10));
 console.log(min(0, -10));
 
+/*In answers*/
+function answ_min(a, b){
+	if (a<b)
+		return a;
+	else
+		return b;
+}
+
 /*Recursion
 
 We’ve seen that % (the remainder operator) 
