@@ -56,7 +56,7 @@ When you have that working, modify your program to print "FizzBuzz",
 for numbers that are divisible by both 3 and 5 (and still print "Fizz" or 
 "Buzz" for numbers divisible by only one of those).
 */
-console.log("Fizzbuzz code\n");
+console.log("Fizzbuzz code");
 for(var cnt = 1; cnt < 101; cnt++){
 	if((cnt % 3 == 0)&&(cnt % 5 == 0)){
 		console.log("FizzBuzz ");
@@ -77,8 +77,15 @@ the word or words to output, and print either this word
 or the number if there is no word, potentially by making 
 elegant use of the || operator. 
 */
-
-
+console.log("Fizzbuzz code: Answers");
+for (var n=1; n<=100; n++){
+	var output="";
+	if (n%3 == 0)
+		output+="Fizz";
+	if (n%5 == 0)
+		output+="Buzz";
+	console.log(output||n);
+}
 
 
 /*Chess board*/
