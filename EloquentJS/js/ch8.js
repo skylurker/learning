@@ -145,9 +145,14 @@ View.prototype.look = function(dir){
 };
 View.prototype.findAll = function(ch){
 	var found = [];
-	for (var dir in directions)
-		if (this.look(dir) == ch)
-			found.push[dir];
+	for (var dir in directions){
+		//console.log("this.look(dir) "+this.look(dir));
+		if (this.look(dir) == ch){
+			found.push(dir);//THE TYPO WAS HERE: found.push[dir];
+			//console.log("found.push[dir] "+found.push[dir]);
+		}
+	}
+	//console.log("FindAll "+found);
 	return found;
 };
 View.prototype.find = function(ch){
@@ -175,20 +180,32 @@ var directions = {
 
 function randomElement(array){
 	return array[Math.floor(Math.random() * array.length)];
-}
+};
 var directionNames = "n ne e se s sw w nw".split(" ");
 // split(separator) turns the string into an array, separators are deleted
 function BouncingCritter(){
 	this.direction = randomElement(directionNames);
-}
+	//console.log("BouncingCritter direction "+this.direction);
+};
 BouncingCritter.prototype.act = function(view){
 	if (view.look(this.direction) != " "){
 		this.direction = view.find(" ") || "s";
 		// || "s" here in case every cell around is not empty, and we don't want this.direction to get null
 	}
+	//console.log("BouncingCritter direction "+this.direction);
 	return {type: "move", direction: this.direction};
-}
+	
+};
 
 var world = new World (plan,   {"#": Wall,
 								"o": BouncingCritter});
+
+
+//BouncingCritter();
+//world.turn();
 console.log(world.toString());
+
+for (var i=0; i<5; i++){
+	world.turn();
+	console.log(world.toString());
+}
