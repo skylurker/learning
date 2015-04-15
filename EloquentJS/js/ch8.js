@@ -7,12 +7,12 @@
 var plan = ["############################",
             "#      #    #      o      ##",
             "#                          #",
-            "#          #####           #",
+            "#     ~    #####           #",
             "##         #   #    ##     #",
             "###           ##     #     #",
             "#           ###      #     #",
             "#   ####                   #",
-            "#   ##       o             #",
+            "#   ##       o     ~       #",
             "# o  #         o       ### #",
             "#    #                     #",
             "############################"];
@@ -197,15 +197,59 @@ BouncingCritter.prototype.act = function(view){
 	
 };
 
+// Wall follower
+/* From the tutorial:
+The critter keeps its left hand to the wall and follows along. */
+function dirPlus(dir, n){
+	var index = directionNames.indexOf(dir);
+	return directionNames[(index + n + 8)%8];
+};
+function WallFollower(){
+	this.dir = "s";
+};
+WallFollower.prototype.act = function(view){
+	var start = this.dir;
+	/* Below: if the WallFollower reached a corner like this (moving up aka north)
+
+
+	        ~
+	    ####
+	       #
+	       # 
+
+	he turns to the left (aka west)
+	*/
+	if(view.look(dirPlus(this.dir, -3)) != " ") // 90 + 45 degrees counterclockwise
+		//there was a typo: (view.look(this.dir, -3) instead of (view.look(dirPlus(this.dir, -3))
+		//IF the critter just passed some obstacle; otherwise it'll go straight
+		start = this.dir = dirPlus(this.dir, -2); // 90 degrees counterclockwise
+	/* Below: if the WallFollower is in a corner like this (originally moving north)
+
+		 #
+	      # ~
+	      ##
+	       #
+	       # 
+
+	he moves to north-west
+	*/
+	while (view.look(this.dir) != " "){
+		this.dir = dirPlus(this.dir, 1); //45 degrees clockwise
+		if (this.dir == start) break; //so the loop won't get infinite accidentally
+	}
+	return {type: "move", direction: this.dir};
+};
+
 var world = new World (plan,   {"#": Wall,
-								"o": BouncingCritter});
+								"o": BouncingCritter,
+								"~": WallFollower});
 
 
 //BouncingCritter();
 //world.turn();
 console.log(world.toString());
 
-for (var i=0; i<5; i++){
+for (var i=0; i<15; i++){
 	world.turn();
 	console.log(world.toString());
 }
