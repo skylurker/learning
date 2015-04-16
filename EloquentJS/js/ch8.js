@@ -132,6 +132,29 @@ World.prototype.checkDestination = function(action, vector){
 	}
 };
 
+
+/* The world with plants */
+
+function LifeLikeWorld (map, legend){
+	World.call(this, map, legend);
+};
+LifeLikeWorld.prototype = Object.create(World.prototype);
+
+var actionTypes = Object.create(null);
+//overriding the original letAct method
+LifeLikeWorld.prototype.letAct = function(critter, vector){
+	var action = critter.act(new View(this, vector));
+	var handled = action && //checking if the action was returned at all
+		action.type in actionTypes && //if the action type exists
+		actionTypes[action.type].call(this, critter, vector, action);//if the action was successfully handled
+
+	if (!handled){
+		critter.energy -= 0.2;
+		if (critter.energy <= 0) //it dies oh noes
+			this.grid.set(vector, null);
+	}
+};
+
 function View(world, vector){
 	this.world = world;
 	this.vector = vector;
