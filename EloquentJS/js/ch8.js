@@ -3,6 +3,7 @@
 
 // # walls and bricks
 // o beings
+// ~ wall followers
 
 var plan = ["############################",
             "#      #    #      o      ##",
@@ -125,13 +126,15 @@ World.prototype.letAct = function(critter, vector){
 	}
 };
 World.prototype.checkDestination = function(action, vector){
-	if (directions.hasOwnProperty(action.direction)){
+	//checks whether the action provides a valid destination
+	if (directions.hasOwnProperty(action.direction)){//if there exists such a direction
 		var dest = vector.plus(directions[action.direction]);
 		if (this.grid.isInside(dest))
 			return dest;
 	}
 };
-
+// hasOwnProperty(prop) checks whether the object has prop as OWN property, 
+// i.e. not inherited in the chain of prototypes
 
 /* The world with plants */
 
@@ -154,6 +157,45 @@ LifeLikeWorld.prototype.letAct = function(critter, vector){
 			this.grid.set(vector, null);
 	}
 };
+
+/* Action handlers */
+
+actionTypes.grow = function(critter){
+	critter.energy += 0.5;
+	return true; //always succeds
+};
+actionTypes.move = function(critter, vector, action){
+	var dest = this.checkDestination(action, vector);
+	if (dest == null ||
+		 critter.energy <= 1 ||
+		 this.grid.get(dest) != null)
+		return false;
+	critter.energy -= 1;
+	this.grid.set(vector, null);
+	this.grid.set(dest, critter);
+	return true;
+};
+actionTypes.eat = function(critter, vector, action){
+	var dest = this.checkDestination(action, vector);
+	var atDest = dest != null && this.grid.get(dest);
+	if (!atDest || atDest.energy == null)
+		return false;
+	critter.energy += atDest.energy;
+	this.grid.set(dest, null);
+	return true;
+};
+actionTypes.reproduce = function(critter, vector, action){
+	var baby = elementFromChar(this.legend, critter.originChar);
+	var dest = this.checkDestination(action, vector);
+	if (dest == null ||
+		critter.energy <= 2 * baby.energy ||
+		this.grid.get(dest) != null)
+		return false;
+	critter.energy -= 2 * baby.energy;
+	this.grid.set(dest, baby);
+	return true;
+};
+
 
 function View(world, vector){
 	this.world = world;
