@@ -305,16 +305,79 @@ WallFollower.prototype.act = function(view){
 	return {type: "move", direction: this.dir};
 };
 
+/* Plants and stuff */
+
+function Plant(){
+	this.energy = 3 + Math.random()*4; // starting with energy level between 3 and 7
+}
+Plant.prototype.act = function(context){
+	if (this.energy > 15){
+		var space = context.find(" ");
+		if (space)
+			return {type: "reproduce", direction: space};
+	}
+	if (this.energy < 20)
+		return {type: "grow"};
+}
+
+function PlantEater(){
+	this.energy = 20;
+};
+PlantEater.prototype.act = function(context){
+	var space = context.find(" ");
+	if (this.energy > 60 && space)
+		return {type: "reproduce", direction: space};
+	var plant = context.find("*");
+	if (plant)
+		return {type: "eat", direction: plant};
+	if (space)
+		return {type: "move", direction: space};
+};
+
+
+/* First plan of the World */
 var world = new World (plan,   {"#": Wall,
 								"o": BouncingCritter,
 								"~": WallFollower});
 
 
+/* Second plan of the World */
+var valley = new LifeLikeWorld(
+  ["############################",
+   "#####                 ######",
+   "##   ***                **##",
+   "#   *##**         **  O  *##",
+   "#    ***     O    ##**    *#",
+   "#       O         ##***    #",
+   "#                 ##**     #",
+   "#   O       #*             #",
+   "#*          #**       O    #",
+   "#***        ##**    O    **#",
+   "##****     ###***       *###",
+   "############################"],
+  {"#": Wall,
+   "O": PlantEater,
+   "*": Plant}
+);
+
+
+
 //BouncingCritter();
 //world.turn();
+
+/* First plan of the World 
 console.log(world.toString());
 
 for (var i=0; i<15; i++){
 	world.turn();
 	console.log(world.toString());
+}*/
+
+/* Second plan of the World */
+console.log(valley.toString());
+
+for (var i=0; i<15; i++){
+	valley.turn();
+	console.log(valley.toString());
 }
+
