@@ -42,20 +42,30 @@ range(1, 10, 2) should return [1, 3, 5, 7, 9].
 Make sure it also works with negative step values 
 so that range(5, 2, -1) produces [5, 4, 3, 2]. */
 
-function range2(start, end){
+function range2(start, end, step){
 	var arr = [];
-	if (arguments[2]){
+	/*if (arguments[2]){
 		var step = arguments[2];
-	} else step = 1;
-	for(var i=start; i<end+1; i+=step){
+	} else step = 1;*/
+	if (step == undefined) step = 1;
+	if (start > end) { //swap
+		var tmp = start;
+		start = end;
+		end = tmp;
+		var isSwapped = true;
+		step = Math.abs(step);
+	};
+	for(var i=start; i<=end; i+=step){
 		arr.push(i);
-	}
+	};
+	if (isSwapped) arr.reverse();
 	return arr;
 }
 console.log("Range");
 console.log(range(1, 10));
 console.log(sum(range(1, 10)));
 console.log(range2(1, 10, 2));
+console.log(range2(5, 2, -1));
 
 
 /* Reversing an array
