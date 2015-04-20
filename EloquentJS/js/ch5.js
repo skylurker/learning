@@ -42,23 +42,29 @@ range(1, 10, 2) should return [1, 3, 5, 7, 9].
 Make sure it also works with negative step values 
 so that range(5, 2, -1) produces [5, 4, 3, 2]. */
 
+/* Hints:
+Having range understand negative step values is probably 
+best done by writing two separate loops—one for counting up 
+and one for counting down—because the comparison that checks whether 
+the loop is finished needs to be >= rather than <= when counting downward.
+
+It might also be worthwhile to use a different default step, namely, -1, 
+when the end of the range is smaller than the start. That way, range(5, 2) 
+returns something meaningful, rather than getting stuck in an infinite loop. */
+
 function range2(start, end, step){
-	var arr = [];
-	/*if (arguments[2]){
-		var step = arguments[2];
-	} else step = 1;*/
-	if (step == undefined) step = 1;
-	if (start > end) { //swap
-		var tmp = start;
-		start = end;
-		end = tmp;
-		var isSwapped = true;
-		step = Math.abs(step);
-	};
-	for(var i=start; i<=end; i+=step){
-		arr.push(i);
-	};
-	if (isSwapped) arr.reverse();
+	var arr = [];	
+	if (start <= end){
+		if (step == undefined) step =  1;
+		for(var i=start; i<=end; i+=step){
+			arr.push(i);
+		};
+	} else{
+		if (step == undefined) step = -1;
+		for(var i=start; i>=end; i+=step){
+			arr.push(i);
+		};
+	}
 	return arr;
 }
 console.log("Range");
@@ -66,6 +72,7 @@ console.log(range(1, 10));
 console.log(sum(range(1, 10)));
 console.log(range2(1, 10, 2));
 console.log(range2(5, 2, -1));
+console.log(range2(5, 5));
 
 
 /* Reversing an array
