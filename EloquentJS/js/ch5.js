@@ -84,7 +84,7 @@ function range3(start, end, step){
 	}
 	return array;
 }
-console.log("Range");
+/*console.log("Range");
 console.log(range(1, 10));
 console.log(sum(range(1, 10)));
 console.log(range2(1, 10, 2));
@@ -93,7 +93,7 @@ console.log(range2(5, 5));
 console.log(range3(1, 10, 2));
 console.log(range3(5, 2, -1));
 console.log(range3(5, 5));
-console.log(range3(5, 2));
+console.log(range3(5, 2));*/
 
 /* Reversing an array
 
@@ -122,3 +122,51 @@ function reverseArray2(input){
 console.log("Reverse array");
 console.log(reverseArray(["A", "B", "C"]));
 console.log(reverseArray2(["A", "B", "C"]));
+
+/*Deep comparison
+
+The == operator compares objects by identity. But sometimes, you would prefer to compare the values of their actual properties.
+
+Write a function, deepEqual, that takes two values and returns true only if they are the same value or are objects with the same properties whose values are also equal when compared with a recursive call to deepEqual.
+
+To find out whether to compare two things by identity (use the === operator for that) or by looking at their properties, you can use the typeof operator. If it produces "object" for both values, you should do a deep comparison. But you have to take one silly exception into account: by a historical accident, typeof null also produces "object".
+
+*/
+/* Hints
+Your test for whether you are dealing with a real object will look something like typeof x == "object" && x != null. Be careful to compare properties only when both arguments are objects. In all other cases you can just immediately return the result of applying ===.
+
+Use a for/in loop to go over the properties. You need to test whether both objects have the same set of property names and whether those properties have identical values. The first test can be done by counting the properties in both objects and returning false if the numbers of properties are different. If they’re the same, then go over the properties of one object, and for each of them, verify that the other object also has the property. The values of the properties are compared by a recursive call to deepEqual.
+
+Returning the correct value from the function is best done by immediately returning false when a mismatch is noticed and returning true at the end of the function.
+*/
+
+function deepEqual(obj1, obj2){
+	if (typeof(obj1)=="object" && typeof(obj2)=="object" 
+		&& typeof(obj1) != null && typeof(obj2) != null){
+		//return "These are objects";
+		//if (obj1.length != obj2.length) return false;
+		//counting properties of both objects
+		var cnt = 0;
+		for (var property in obj1) 
+			cnt++;
+			//deepEqual(obj1[property], obj2[property]);
+		for (var property in obj2)
+			cnt--;
+		if (cnt != 0) return false;
+		for (var property in obj1){
+			if (property in obj2){
+				return deepEqual(obj1[property], obj2[property]);
+			} else return false;
+		}
+	} else{
+	return obj1===obj2;
+	}
+	//return "lala";
+}
+var obj = {here: {is: "an"}, object: 2};
+console.log(deepEqual(obj, obj));
+console.log(deepEqual(1, 2));
+console.log(deepEqual(-10, -10));
+console.log(deepEqual({here: 1}, {here: 1, object: 2, boom: 3}));
+console.log(deepEqual(obj, {here: 1, object: 2}));
+console.log(deepEqual(obj, {here: {is: "an"}, object: 2}));
