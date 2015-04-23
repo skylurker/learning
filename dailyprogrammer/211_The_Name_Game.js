@@ -122,11 +122,16 @@ function getName(){
 
 function composePoem(inputName){
 	var croppedName = inputName.slice(1);
+	var firstLetter = inputName.charAt(0);
 	var outputString = "";
+	//console.log(firstLetter.toUpperCase());
+	var ifB = (firstLetter.toUpperCase() == "B") ? "" : "b";
+	var ifF = (firstLetter.toUpperCase() == "F") ? "" : "F";
+	var ifM = (firstLetter.toUpperCase() == "M") ? "" : "m";
 
-    outputString += inputName + ", " + inputName +", bo-b" + croppedName + "\n";
-    outputString += "Banana-fana fo-f" + croppedName + "\n";
-    outputString += "Fee-fi-mo--m" + croppedName + "\n";
+    outputString += inputName + ", " + inputName +", bo-" + ifB + croppedName + "\n";
+    outputString += "Banana-fana fo-" + ifF + croppedName + "\n";
+    outputString += "Fee-fi-mo-" + ifM + croppedName + "\n";
     outputString += inputName + "!";
     return outputString;
 }
