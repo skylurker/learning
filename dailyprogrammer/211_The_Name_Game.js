@@ -121,12 +121,14 @@ function getName(){
 }
 
 function composePoem(inputName){
-	var croppedName = inputName.slice(1);
+	var vowels = ["A", "E", "I", "O", "U"]; // Sorry, no place for you here, Yggrit, Y sometimes goes as a consonant
 	var firstLetter = inputName.charAt(0);
+	var bigFirstLetter = firstLetter.toUpperCase();
+	var croppedName = (vowels.indexOf(bigFirstLetter) != -1) ? inputName : inputName.slice(1);
 	var outputString = "";
 	//console.log(firstLetter.toUpperCase());
 	var ifB = (firstLetter.toUpperCase() == "B") ? "" : "b";
-	var ifF = (firstLetter.toUpperCase() == "F") ? "" : "F";
+	var ifF = (firstLetter.toUpperCase() == "F") ? "" : "f";
 	var ifM = (firstLetter.toUpperCase() == "M") ? "" : "m";
 
     outputString += inputName + ", " + inputName +", bo-" + ifB + croppedName + "\n";
