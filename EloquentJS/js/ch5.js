@@ -227,7 +227,6 @@ function arrayToList(array){
 		//list.value = array[i];
 		//tmp = list;
 	}
-
 	return list;
 }
 
@@ -237,6 +236,34 @@ console.log(arrayToList([10, 20]));
 // → {value: 10, rest: {value: 20, rest: null}}
 
 
+/*Hints
+To run over a list (in listToArray and nth), 
+a for loop specification like this can be used:
+
+for (var node = list; node; node = node.rest) {}
+
+Can you see how that works? Every iteration of 
+the loop, node points to the current sublist, 
+and the body can read its value property to get 
+the current element. At the end of an iteration, 
+node moves to the next sublist. When that is null, 
+we have reached the end of the list and the loop is finished.
+*/
+function listToArray(list){
+var array = [];
+var cnt=0;
+for (var node = list; node; node = node.rest) {
+	array[cnt] = node.value;
+	cnt++;
+}
+	//reverseArrayInPlace(array);
+	return array;
+}
+
+console.log("listToArray");
+console.log(listToArray({value: 10, rest: {value: 20, rest: null}}));
+console.log(listToArray(arrayToList([10, 20, 30])));
+// → [10, 20, 30]
 
 /*Deep comparison
 
