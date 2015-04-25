@@ -265,6 +265,20 @@ console.log(listToArray({value: 10, rest: {value: 20, rest: null}}));
 console.log(listToArray(arrayToList([10, 20, 30])));
 // → [10, 20, 30]
 
+function nth(list, index){
+	var cnt=0;
+	var found = undefined;
+	for (var node = list; node; node=node.rest){
+		if (index == cnt) 
+			found = node.value;
+		cnt++;
+	}
+	return found;
+}
+console.log("nth");
+console.log(nth(arrayToList([10, 20, 30]), 1));
+// → 20
+
 /*Deep comparison
 
 The == operator compares objects by identity. 
