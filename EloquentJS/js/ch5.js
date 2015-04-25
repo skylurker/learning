@@ -218,12 +218,14 @@ like list = {value: X, rest: list} to add an element.
 */
 
 function arrayToList(array){
-	var list = {value: null, rest: null}
-	var tmp = list;
+	//var list = {value: null, rest: null}
+	//var tmp = list;
+	var list = null;
 	for(var i=array.length-1; i>=0; i--){
-		list.rest = tmp;
-		list.value = array[i];
-		tmp = list;
+		list = {value: array[i], rest: list}
+		//list.rest = tmp;
+		//list.value = array[i];
+		//tmp = list;
 	}
 
 	return list;
