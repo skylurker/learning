@@ -293,10 +293,9 @@ that’s in this list’s rest property.
 
 function nthRecursive(list, index){
 	
-	
-		if (index == 0) return list.value;
-		index--;
-		return nthRecursive(list.rest, index);
+	if (!list) return undefined; //from the answers
+	else if (index == 0) return list.value;
+	else	return nthRecursive(list.rest, index-1);
 	
 	
 }
