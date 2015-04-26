@@ -296,7 +296,7 @@ function nthRecursive(list, index){
 	
 		if (index == 0) return list.value;
 		index--;
-		nthRecursive(list.rest, index);
+		return nthRecursive(list.rest, index);
 	
 	
 }
