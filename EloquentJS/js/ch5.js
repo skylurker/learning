@@ -280,8 +280,29 @@ console.log(nth(arrayToList([10, 20, 30]), 1));
 // → 20
 
 /*
-The recursive version of nth will, similarly, look at an ever smaller part of the “tail” of the list and at the same time count down the index until it reaches zero, at which point it can return the value property of the node it is looking at. To get the zeroeth element of a list, you simply take the value property of its head node. To get element N + 1, you take the Nth element of the list that’s in this list’s rest property.
+The recursive version of nth will, similarly, 
+look at an ever smaller part of the “tail” of 
+the list and at the same time count down the index 
+until it reaches zero, at which point it can return 
+the value property of the node it is looking at. 
+To get the zeroeth element of a list, you simply 
+take the value property of its head node. To get 
+element N + 1, you take the Nth element of the list 
+that’s in this list’s rest property.
 */
+
+function nthRecursive(list, index){
+	
+	
+		if (index == 0) return list.value;
+		index--;
+		nthRecursive(list.rest, index);
+	
+	
+}
+console.log("nthRecursive");
+console.log(nthRecursive(arrayToList([10, 20, 30]), 1));
+// → 20
 
 function prepend(value, list){
 	var list = {value: value, rest: list};
