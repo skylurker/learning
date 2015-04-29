@@ -33,20 +33,35 @@ Met Phe Arg Gly STOP
 The function takes a string of uppercase characters A, T, G, C separated by spaces as input, gives this string and the other-side DNA string as output. */
 
 function dnaReplicate(input){
-var output="";
-for (var i=0; i<input.length; i++){
-switch(input[i]){
-case " ": output+=" "; break;
-case "A": output+="T"; break;
-case "T": output+="A"; break;
-case "G": output+="C"; break;
-case "C": output+="G"; break;
-default: console.log("Something wicked this way comes");
-}
-}
-console.log(input);
-console.log(output);
+	var output="";
+	for (var i=0; i<input.length; i++){
+		switch(input[i]){
+			case " ": output+=" "; break;
+			case "A": output+="T"; break;
+			case "T": output+="A"; break;
+			case "G": output+="C"; break;
+			case "C": output+="G"; break;
+			default: console.log("Something wicked this way comes");
+		}
+	}
+	console.log(input);
+	console.log(output);
 //return true;
 }
 
 dnaReplicate("A A T G C C T A T G G C");
+
+/* A bit smarter solution, thanks to chunes 
+http://www.reddit.com/r/dailyprogrammer/comments/2zyipu/20150323_challenge_207_easy_bioinformatics_1_dna/cpnnrn5 */
+function dnaReplicate2(input){
+	var bases = "ATGC TACG ";
+//var inputArray = input.split(" ");
+for (var i=0; i<input.length; i++){
+
+	output+=bases.charAt(bases.indexOf(input.charAt(i))+5);
+	//output+=input.charAt(i)
+}
+console.log(input);
+console.log(output);
+}
+dnaReplicate2("A A T G C C T A T G G C");
