@@ -22,6 +22,14 @@ var map;
 // the ASCII display: a 2D array of characters (and THIS thing does change)
 var asciidisplay;
 
+// the list of all actors, where actorList[0] is the player
+var player;
+var actorList; // actorList[index] = {x coordinate, y coordinate, hitpoints}
+var livingEnemies; 
+
+// for a quick search: this one points to each actor in its position
+var actorMap; // actorMap[actor.y_actor.x] = actor
+
 // initialize Phaser (a game framework)
 var game = new Phaser.Game(COLS * FONT * 0.6, ROWS * FONT, Phaser.AUTO, null, {
   create: create
@@ -32,6 +40,10 @@ var game = new Phaser.Game(COLS * FONT * 0.6, ROWS * FONT, Phaser.AUTO, null, {
 // We're also telling Phaser that it should call our create() function 
 // immediately after it's finished initialising.
 
+// get a random integer number
+function randomInt(max) {
+  return Math.floor(Math.random() * max);
+}
 
 function create() {
   // initialize the keyboard commands
@@ -50,6 +62,10 @@ function create() {
       newRow.push(initCell(map[y][x], x, y));
   }
   drawMap();
+  
+  // initialize actors
+  initActors();
+  drawActors();
 }
 
 
@@ -64,6 +80,44 @@ function onKeyUp(event) {
   }
 }
 
+// create actors at random locations
+function initActors() {
+  actorList = [];
+  actorMap = {}; // associative array
+  for (var e = 0; e < ACTORS; e++) {
+    // create new actor
+    var actor = {x: 0, y: 0, hp: e == 0 ? 3 : 1}; // 3 hitpoints for player, 1 for each monster
+    do {
+      // pick a random position which is both a floor AND is not occupied
+      actor.y = randomInt(ROWS);
+      actor.x = randomInt(COLS);
+    } while (map[actor.y][actor.x] == '#' || actorMap[actor.y + "_" + actor.x] != null);
+    
+    // add references to the actor to both actorMap and actorList
+    actorMap[actor.y + "_" + actor.x] = actor;
+    actorList.push(actor);
+  }
+  
+  // player is the first element of the array
+  player = actorList[0];
+  livingEnemies = ACTORS - 1;
+  console.log("function initActors");
+}
+
+// show the actors
+// enemies are displayed as e, and the player character as its number of hitpoints
+function drawActors() {
+  for (var a in actorList) {
+    // if the creature is still alive and breathing
+    if (actorList[a].hp > 0)
+      // assign place_on_the_screen[row][col].content = index_of_actor_in_actorList
+      // if index_of_actor == 0 (i.e. it is the adventurer), then display hp; otherwise, display letter e
+      (asciidisplay[actorList[a].y][actorList[a].x].content = a) == 0 ? '' + player.hp : 'e';
+  }
+  console.log("function drawActors");
+}
+  
+  
 function initCell(ch, x, y) {
   // add a single cell in a given position to the asciidisplay
   var style = { font: FONT + "px monospace", fill: "#fff"};
