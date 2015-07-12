@@ -3,7 +3,11 @@
 // by Ido Yehieli22 
 // published at tutsplus.com on Dec 2013
 
+// with edits by skylurker, Jul 2015
 
+// typed with kwrite
+
+// ------------------
 // some constants
 
 // font size
@@ -45,87 +49,19 @@ function randomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-function create() {
-  // initialize the keyboard commands
-  game.input.keyboard.addCallbacks(null, null, onKeyUp);
-  console.log("function create");
-  // initialize map
-  initMap();
-  
-  // initialize screen
+function initDisplay() {
   asciidisplay = [];
   for (var y = 0; y < ROWS; y++) {
     var newRow = [];
     asciidisplay.push(newRow);
     for (var x = 0; x < COLS; x++)
-      // newRow.push(initCell('', x, y));
-      newRow.push(initCell(map[y][x], x, y));
-  }
-  drawMap();
-  
-  // initialize actors
-  initActors();
-  drawActors();
-}
-
-
-
-function onKeyUp(event) {
-  switch (event.keyCode) {
-    // stub
-    case Phaser.Keyboard.LEFT:
-    case Phaser.Keyboard.RIGHT:
-    case Phaser.Keyboard.UP:
-    case Phaser.Keyboard.DOWN:
-  }
-}
-
-// create actors at random locations
-function initActors() {
-  actorList = [];
-  actorMap = {}; // associative array
-  for (var e = 0; e < ACTORS; e++) {
-    // create new actor
-    var actor = {x: 0, y: 0, hp: e == 0 ? 3 : 1}; // 3 hitpoints for player, 1 for each monster
-    do {
-      // pick a random position which is both a floor AND is not occupied
-      actor.y = randomInt(ROWS);
-      actor.x = randomInt(COLS);
-    } while (map[actor.y][actor.x] == '#' || actorMap[actor.y + "_" + actor.x] != null);
+      newRow.push(' ');
     
-    // add references to the actor to both actorMap and actorList
-    actorMap[actor.y + "_" + actor.x] = actor;
-    actorList.push(actor);
   }
-  
-  // player is the first element of the array
-  player = actorList[0];
-  livingEnemies = ACTORS - 1;
-  console.log("function initActors");
+  console.log("function initDisplay");
 }
 
-// show the actors
-// enemies are displayed as e, and the player character as its number of hitpoints
-function drawActors() {
-  for (var a in actorList) {
-    // if the creature is still alive and breathing
-    if (actorList[a].hp > 0)
-      // assign place_on_the_screen[row][col].content = index_of_actor_in_actorList
-      // if index_of_actor == 0 (i.e. it is the adventurer), then display hp; otherwise, display letter e
-      (asciidisplay[actorList[a].y][actorList[a].x].content = a) == 0 ? '' + player.hp : 'e';
-  }
-  console.log("function drawActors");
-}
-  
-  
-function initCell(ch, x, y) {
-  // add a single cell in a given position to the asciidisplay
-  var style = { font: FONT + "px monospace", fill: "#fff"};
-  console.log("function initCell");
-  return game.add.text(FONT * 0.6 * x, FONT * y, ch, style);
-}
-
-// create a random map
+// initialize a random map
 function initMap() {
   map = [];
   for (var y = 0; y < ROWS; y++) { // like for int i = 0...
@@ -149,14 +85,126 @@ function initMap() {
 // http://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268
 // http://gamedevelopment.tutsplus.com/tutorials/cave-levels-cellular-automata--gamedev-9664
 
+// create actors at random locations
+function initActors() {
+  actorList = [];
+  actorMap = {}; // associative array
+  for (var e = 0; e < ACTORS; e++) {
+    // create new actor
+    var actor = {x: 0, y: 0, hp: e == 0 ? 3 : 1}; // 3 hitpoints for player, 1 for each monster
+    do {
+      // pick a random position which is both a floor AND is not occupied
+      actor.y = randomInt(ROWS);
+      actor.x = randomInt(COLS);
+    } while (map[actor.y][actor.x] == '#' || actorMap[actor.y + "_" + actor.x] != null);
+    
+    // add references to the actor to both actorMap and actorList
+    actorMap[actor.y + "_" + actor.x] = actor;
+    actorList.push(actor);
+  }
+  
+  // player is the first element of the array
+  player = actorList[0];
+  livingEnemies = ACTORS - 1;
+  console.log("function initActors");
+  console.log(player);
+}
+
+// show the actors
+// enemies are displayed as e, and the player character as its number of hitpoints
+function drawActors() {
+  for (var a in actorList) {
+    // if the creature is still alive and breathing
+    if (actorList[a].hp > 0) {
+      var a_x = actorList[a].x;
+      var a_y = actorList[a].y;
+      // assign place_on_the_screen[row][col].content = index_of_actor_in_actorList
+      // if index_of_actor == 0 (i.e. it is the adventurer), then display hp; otherwise, display letter e
+     //  asciidisplay[actorList[a].y][actorList[a].x].content = a == 0 ? '' + player.hp : 'e';
+    // asciidisplay[actorList[a].y][actorList[a].x].content = (a == 0) ? initCell('@', actorList[a].x, actorList[a].y) : initCell('e', actorList[a].x, actorList[a].y);
+    // initCell(map[y][x], x, y)
+      asciidisplay[a_y][a_x] = (a == 0) ? '@' : 'e';
+    }
+  }
+  console.log("function drawActors");
+}
+  
+  
+function drawCell(ch, x, y) {
+  // add a single cell in a given position to the asciidisplay
+  var style = { 
+    font: FONT + "px monospace", 
+    fill: "#fff"
+  };
+  console.log("function initCell");
+  return game.add.text(FONT * 0.6 * x, FONT * y, ch, style);
+}
+
+function render() {
+  for (var y = 0; y < ROWS; y++) {
+    for (var x = 0; x < COLS; x++)
+      drawCell(asciidisplay[y][x], x, y);
+  }
+}
+
 
 function drawMap() {
   for (var y = 0; y < ROWS; y++) { // like for int i = 0...
     for (var x = 0; x < COLS; x++) 
-      asciidisplay[y][x].content = map[y][x]; // x and y are as standard 2D coordinates: horiz and vert
+      asciidisplay[y][x] = map[y][x]; // x and y are as standard 2D coordinates: horiz and vert
+    // initCell(map[y][x], x, y);
   }
   console.log("function drawMap");
 }
+
   
 // TODO: check if asciidisplay is an array of objects or whut
 // TODO: check what the "content" property is (is it native js or not)
+
+function create() {
+  // initialize the keyboard commands
+  game.input.keyboard.addCallbacks(null, null, onKeyUp);
+  console.log("function create");
+  initDisplay();
+  // initialize map
+  initMap();
+  drawMap();
+  // initialize actors
+  initActors();
+  drawActors();
+  
+  
+  // initialize screen
+  /*
+   * asciidisplay = [];
+  for (var y = 0; y < ROWS; y++) {
+    var newRow = [];
+    asciidisplay.push(newRow);
+    for (var x = 0; x < COLS; x++)
+      newRow.push(initCell('', x, y));
+      newRow.push(initCell(map[y][x], x, y));
+  }
+  */
+  //drawMap();
+  //
+  
+  render();
+  
+  //debugging
+ //asciidisplay[3][5].content = 'P';
+  //initCell('Q', 5, 5);
+  
+}
+
+
+
+function onKeyUp(event) {
+  switch (event.keyCode) {
+    // stub
+    case Phaser.Keyboard.LEFT:
+    case Phaser.Keyboard.RIGHT:
+    case Phaser.Keyboard.UP:
+    case Phaser.Keyboard.DOWN:
+  }
+}
+
