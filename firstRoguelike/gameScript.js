@@ -168,7 +168,7 @@ function canGo(actor, dir) {
   actor.x + dir.x <= COLS - 1 &&                // right side of the screen
   actor.y + dir.y >= 0 &&                       // upper side of the screen
   actor.y + dir.y <= ROWS - 1 &&                // lower side of the screen
-  map[actor.y + dir.y][actor.x + dir.x] == '.'; // floor tile
+  asciidisplay[actor.y + dir.y][actor.x + dir.x] == '.'; // floor tile
 }
 
 function create() {
@@ -200,10 +200,17 @@ function create() {
   
   render();
   
-  //debugging
+ //debugging
+  
  //asciidisplay[3][5].content = 'P';
  // drawCell('Q', 3, 5);
- 
+ // var walkTest = canGo(actorList[0], {x: -1, y: 1});
+ // var walkTest2 = canGo(actorList[0], {x: 1, y: 0});
+ // var walkTest3 = canGo(actorList[0], {x: 3, y: 3});
+ // console.log("canGo(actorList[0], {x: -1, y: 1}) : " + walkTest);
+ // console.log("canGo(actorList[0], {x: 1, y: 0}) : " + walkTest2);
+ // console.log("canGo(actorList[0], {x: 3, y: 3}) : " + walkTest3);
+  
 }
 
 
