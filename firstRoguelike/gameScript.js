@@ -168,7 +168,62 @@ function canGo(actor, dir) {
   actor.x + dir.x <= COLS - 1 &&                // right side of the screen
   actor.y + dir.y >= 0 &&                       // upper side of the screen
   actor.y + dir.y <= ROWS - 1 &&                // lower side of the screen
-  asciidisplay[actor.y + dir.y][actor.x + dir.x] == '.'; // floor tile
+  map[actor.y + dir.y][actor.x + dir.x] == '.'; // floor tile OR the enemy
+}
+
+// This function, given a valid direction,
+// moves the actor to the desired empty tile,
+// OR, if the tile is occupied with some other being, attacks it.
+// (But does not move to the desired tile.)
+// If the victim's HP level falls below zero, it dies and gets
+// erased from the actorMap and actorList.
+// This function DOES NOT redraw the map.
+// Redrawing occures inside the onKeyUp function.
+// Apparently, enemies attack each other, too.
+function moveTo(actor, dir) {
+ // check whether actor can move in the given direction
+  if (!canGo(actor, dir))
+    return false;
+  
+  // compose an index for the actorMap check
+  var newKey = (actor.y + dir.y) + '_' + (actor.x + dir.x);
+  // if the destination tile has an actor in it
+  if (actorMap[newKey] != null) {
+    var victim = actorMap[newKey];
+    // decrement their hitpoints
+    victim.hp--;
+    // if the victim is dead, remove it from the actorMap and actorList
+    if (victim.hp <=0 ) {
+      actorMap[newKey] = null;
+      actorList[actorList.indexOf(victim)] = null;
+      // if it was an enemy
+      if (victim != player) {
+	livingEnemies--;
+	// if all the enemies are destroyed
+	if (livingEnemies == 0) {
+	  // display "victory message"
+	  var victory = game.add.text(
+	    game.world.centerX, 
+	    game.world.centerY, 
+	    'You won!\nPress Ctrl + R to restart',
+	    {fill : '#2e2', background : '#000', align : 'center'});
+	  victory.anchor.setTo(0.5, 0.5);
+	} // end livingEnemies == 0
+      } // end victim != player
+    } // end victim.hp <=0
+  } else {
+    // if the tile was empty:
+    // remove reference to the actor's old position
+    actorMap[actor.y + '_' + actor.x] = null;
+    
+    // update position
+    actor.x += dir.x;
+    actor.y += dir.y;
+    
+    // add reference to the actor's new position
+    actorMap[actor.y + '_' + actor.x] = actor;
+  }
+  return true;
 }
 
 function create() {
