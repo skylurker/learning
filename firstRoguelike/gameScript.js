@@ -161,6 +161,16 @@ function drawMap() {
 // TODO: check if asciidisplay is an array of objects or whut
 // TODO: check what the "content" property is (is it native js or not)
 
+
+// check if the actor can walk this direction
+function canGo(actor, dir) {
+  return actor.x + dir.x >= 0 &&                // left side of the screen
+  actor.x + dir.x <= COLS - 1 &&                // right side of the screen
+  actor.y + dir.y >= 0 &&                       // upper side of the screen
+  actor.y + dir.y <= ROWS - 1 &&                // lower side of the screen
+  map[actor.y + dir.y][actor.x + dir.x] == '.'; // floor tile
+}
+
 function create() {
   // initialize the keyboard commands
   game.input.keyboard.addCallbacks(null, null, onKeyUp);
@@ -192,8 +202,8 @@ function create() {
   
   //debugging
  //asciidisplay[3][5].content = 'P';
-  //initCell('Q', 5, 5);
-  
+ // drawCell('Q', 3, 5);
+ 
 }
 
 
