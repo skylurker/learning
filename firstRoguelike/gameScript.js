@@ -26,6 +26,9 @@ var map;
 // the ASCII display: a 2D array of characters (and THIS thing does change)
 var asciidisplay;
 
+// an array for displaying the characters, kinda like an interface for asciidisplay
+var text;
+
 // the list of all actors, where actorList[0] is the player
 var player;
 var actorList; // actorList[index] = {x coordinate, y coordinate, hitpoints}
@@ -51,13 +54,30 @@ function randomInt(max) {
 
 function initDisplay() {
   asciidisplay = [];
+  text = [];
+  
   for (var y = 0; y < ROWS; y++) {
     var newRow = [];
+    var newTextRow = [];
     asciidisplay.push(newRow);
-    for (var x = 0; x < COLS; x++)
+    text.push(newTextRow);
+    for (var x = 0; x < COLS; x++){
       newRow.push(' ');
-    
-  }
+      console.log("function drawCell");
+      // return game.add.text(FONT * 0.6 * x, FONT * y, ch, style);
+      newTextRow.push(//'_');
+	game.add.text(
+	  FONT * 0.6 * x, 
+	  FONT * y, 
+	  '_', 
+	  { 
+           font: FONT + "px monospace", 
+           fill: "#fff",
+          } // end var style
+	) // end game.add.text
+      ); // end newTextRow.push
+    }; //end for COLS
+  }; // end for ROWS
   console.log("function initDisplay");
 }
 
@@ -137,7 +157,8 @@ function drawCell(ch, x, y) {
     fill: "#fff",
   };
   console.log("function drawCell");
-  return game.add.text(FONT * 0.6 * x, FONT * y, ch, style);
+  text[y][x].setText(ch);
+  // return game.add.text(FONT * 0.6 * x, FONT * y, ch, style);
 }
 
 function render() {
