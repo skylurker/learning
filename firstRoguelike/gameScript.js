@@ -37,6 +37,9 @@ var livingEnemies;
 // for a quick search: this one points to each actor in its position
 var actorMap; // actorMap[actor.y_actor.x] = actor
 
+// floor tiles which appear when the actor walks away
+var floorTiles; // floorTiles[actor] = {x, y}
+
 // initialize Phaser (a game framework)
 var game = new Phaser.Game(COLS * FONT * 0.6, ROWS * FONT, Phaser.AUTO, null, {
   create: create
@@ -109,6 +112,7 @@ function initMap() {
 function initActors() {
   actorList = [];
   actorMap = {}; // associative array
+  floorTiles = {};
   for (var e = 0; e < ACTORS; e++) {
     // create new actor
     var actor = {x: 0, y: 0, hp: e == 0 ? 3 : 1}; // 3 hitpoints for player, 1 for each monster
@@ -120,6 +124,7 @@ function initActors() {
     
     // add references to the actor to both actorMap and actorList
     actorMap[actor.y + "_" + actor.x] = actor;
+    floorTiles[actor] = {x: actor.x, y: actor.y};
     actorList.push(actor);
   }
   
@@ -144,6 +149,7 @@ function drawActors() {
     // asciidisplay[actorList[a].y][actorList[a].x].content = (a == 0) ? initCell('@', actorList[a].x, actorList[a].y) : initCell('e', actorList[a].x, actorList[a].y);
     // initCell(map[y][x], x, y)
       asciidisplay[a_y][a_x] = (a == 0) ? '@' : 'e';
+      drawCell(asciidisplay[a_y][a_x], a_x, a_y);
     }
   }
   console.log("function drawActors");
@@ -156,7 +162,7 @@ function drawCell(ch, x, y) {
     font: FONT + "px monospace", 
     fill: "#fff",
   };
-  console.log("function drawCell");
+ // console.log("function drawCell");
   text[y][x].setText(ch);
   // return game.add.text(FONT * 0.6 * x, FONT * y, ch, style);
 }
@@ -172,13 +178,20 @@ function render() {
 function drawMap() {
   for (var y = 0; y < ROWS; y++) { // like for int i = 0...
     for (var x = 0; x < COLS; x++) 
-      asciidisplay[y][x] = map[y][x]; // x and y are as standard 2D coordinates: horiz and vert
+     // asciidisplay[y][x] = map[y][x]; // x and y are as standard 2D coordinates: horiz and vert
     // initCell(map[y][x], x, y);
+    drawCell(map[y][x], x, y);
   }
   console.log("function drawMap");
 }
 
-  
+function drawFloorTiles(){
+  for (var tile in floorTiles){
+    if (floorTiles[tile] != null)
+      drawCell('.', floorTiles[tile].x, floorTiles[tile].y);
+  }
+}
+
 // TODO: check if asciidisplay is an array of objects or whut
 // TODO: check what the "content" property is (is it native js or not)
 // TODO: try to implement "partial" rendering, 
@@ -219,6 +232,7 @@ function moveTo(actor, dir) {
     if (victim.hp <=0 ) {
       actorMap[newKey] = null;
       actorList[actorList.indexOf(victim)] = null;
+      floorTiles[victim] = {x: victim.x, y: victim.y};
       // if it was an enemy
       if (victim != player) {
 	livingEnemies--;
@@ -238,6 +252,8 @@ function moveTo(actor, dir) {
     // if the tile was empty:
     // remove reference to the actor's old position
     actorMap[actor.y + '_' + actor.x] = null;
+    floorTiles[actor] = {x: actor.x, y: actor.y};
+    
     
     // update position
     actor.x += dir.x;
@@ -276,7 +292,7 @@ function create() {
   //drawMap();
   //
   
-  render();
+ // render();
   
  //debugging
   
@@ -300,11 +316,11 @@ function onKeyUp(event) {
   switch (event.keyCode) {
     case Phaser.Keyboard.LEFT:
       acted = moveTo(player, {x: -1, y: 0});
-      console.log("pressed Phaser.Keyboard.LEFT");
+     // console.log("pressed Phaser.Keyboard.LEFT");
       break;
     case Phaser.Keyboard.RIGHT:
       acted = moveTo(player, {x: 1, y: 0});
-      alert("Pressed Keyboard RIGHT");
+     // alert("Pressed Keyboard RIGHT");
       break;
     case Phaser.Keyboard.UP:
       acted = moveTo(player, {x: 0, y: -1});
@@ -313,9 +329,9 @@ function onKeyUp(event) {
       acted = moveTo(player, {x: 0, y: 1});
       break;
   }
- if (acted)
-   drawMap();
-    drawActors();
-   render();
+  // if (acted)
+   drawFloorTiles();
+   drawActors();
+  // render();
 }
 
