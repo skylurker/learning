@@ -134,9 +134,9 @@ function drawCell(ch, x, y) {
   // add a single cell in a given position to the asciidisplay
   var style = { 
     font: FONT + "px monospace", 
-    fill: "#fff"
+    fill: "#fff",
   };
-  console.log("function initCell");
+  console.log("function drawCell");
   return game.add.text(FONT * 0.6 * x, FONT * y, ch, style);
 }
 
@@ -160,7 +160,8 @@ function drawMap() {
   
 // TODO: check if asciidisplay is an array of objects or whut
 // TODO: check what the "content" property is (is it native js or not)
-
+// TODO: try to implement "partial" rendering, 
+// i.e. we render only those parts of the world which have changed, not the whole world
 
 // check if the actor can walk this direction
 function canGo(actor, dir) {
@@ -181,7 +182,8 @@ function canGo(actor, dir) {
 // Redrawing occures inside the onKeyUp function.
 // Apparently, enemies attack each other, too.
 function moveTo(actor, dir) {
- // check whether actor can move in the given direction
+ console.log("moveTo " + actor + dir);
+  // check whether actor can move in the given direction
   if (!canGo(actor, dir))
     return false;
   
@@ -257,7 +259,7 @@ function create() {
   
  //debugging
   
- //asciidisplay[3][5].content = 'P';
+ // asciidisplay[3][5].content = 'P';
  // drawCell('Q', 3, 5);
  // var walkTest = canGo(actorList[0], {x: -1, y: 1});
  // var walkTest2 = canGo(actorList[0], {x: 1, y: 0});
@@ -271,12 +273,28 @@ function create() {
 
 
 function onKeyUp(event) {
+  
+  // move @ depending on the player's input
+  var acted = false;
   switch (event.keyCode) {
-    // stub
     case Phaser.Keyboard.LEFT:
+      acted = moveTo(player, {x: -1, y: 0});
+      console.log("pressed Phaser.Keyboard.LEFT");
+      break;
     case Phaser.Keyboard.RIGHT:
+      acted = moveTo(player, {x: 1, y: 0});
+      alert("Pressed Keyboard RIGHT");
+      break;
     case Phaser.Keyboard.UP:
+      acted = moveTo(player, {x: 0, y: -1});
+      break;
     case Phaser.Keyboard.DOWN:
+      acted = moveTo(player, {x: 0, y: 1});
+      break;
   }
+ if (acted)
+   drawMap();
+    drawActors();
+   render();
 }
 
