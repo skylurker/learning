@@ -135,7 +135,7 @@ function initActors() {
 function drawActors() {
   for (var a in actorList) {
     // if the creature is still alive and breathing
-    if (actorList[a].hp > 0) {
+    if (actorList[a] != null && actorList[a].hp > 0) {
       var a_x = actorList[a].x;
       var a_y = actorList[a].y;
       // assign place_on_the_screen[row][col].content = index_of_actor_in_actorList
