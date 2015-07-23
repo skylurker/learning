@@ -18,7 +18,7 @@ var ROWS = 10;
 var COLS = 15;
 
 // number of actors per level (including the player)
-var ACTORS = 10;
+var ACTORS = 2;
 
 // the structure of the map (it is static; once created, it doesn't change)
 var map;
@@ -39,6 +39,14 @@ var actorMap; // actorMap[actor.y_actor.x] = actor
 
 // floor tiles which appear when the actor walks away
 var floorTiles; // floorTiles[actor] = {x, y}
+//TRY floorTiles[actor_list_index] = {x, y}
+
+
+var directions = [
+    {x: -1, y:  0},
+    {x:  1, y:  0},
+    {x:  0, y: -1},
+    {x:  0, y:  1}];
 
 // initialize Phaser (a game framework)
 var game = new Phaser.Game(COLS * FONT * 0.6, ROWS * FONT, Phaser.AUTO, null, {
@@ -66,7 +74,7 @@ function initDisplay() {
     text.push(newTextRow);
     for (var x = 0; x < COLS; x++){
       newRow.push(' ');
-      console.log("function drawCell");
+     // console.log("function drawCell");
       // return game.add.text(FONT * 0.6 * x, FONT * y, ch, style);
       newTextRow.push(//'_');
 	game.add.text(
@@ -81,7 +89,7 @@ function initDisplay() {
       ); // end newTextRow.push
     }; //end for COLS
   }; // end for ROWS
-  console.log("function initDisplay");
+ // console.log("function initDisplay");
 }
 
 // initialize a random map
@@ -112,7 +120,8 @@ function initMap() {
 function initActors() {
   actorList = [];
   actorMap = {}; // associative array
-  floorTiles = {};
+ // floorTiles = {};
+  floorTiles = [];
   for (var e = 0; e < ACTORS; e++) {
     // create new actor
     var actor = {x: 0, y: 0, hp: e == 0 ? 3 : 1}; // 3 hitpoints for player, 1 for each monster
@@ -124,7 +133,7 @@ function initActors() {
     
     // add references to the actor to both actorMap and actorList
     actorMap[actor.y + "_" + actor.x] = actor;
-    floorTiles[actor] = {x: actor.x, y: actor.y};
+    floorTiles[e] = {x: actor.x, y: actor.y};
     actorList.push(actor);
   }
   
@@ -182,12 +191,13 @@ function drawMap() {
     // initCell(map[y][x], x, y);
     drawCell(map[y][x], x, y);
   }
-  console.log("function drawMap");
+  //console.log("function drawMap");
 }
 
 function drawFloorTiles(){
-  for (var tile in floorTiles){
-    if (floorTiles[tile] != null)
+  //for (var tile in floorTiles){
+  for (var tile = 0; tile < floorTiles.length; tile++) {
+   // if (floorTiles[tile] != null)
       drawCell('.', floorTiles[tile].x, floorTiles[tile].y);
   }
 }
@@ -203,7 +213,8 @@ function canGo(actor, dir) {
   actor.x + dir.x <= COLS - 1 &&                // right side of the screen
   actor.y + dir.y >= 0 &&                       // upper side of the screen
   actor.y + dir.y <= ROWS - 1 &&                // lower side of the screen
-  map[actor.y + dir.y][actor.x + dir.x] == '.'; // floor tile OR the enemy
+  map[actor.y + dir.y][actor.x + dir.x] == '.'&& // floor tile OR the enemy
+  directions.indexOf(dir) != -1;
 }
 
 // This function, given a valid direction,
@@ -216,7 +227,7 @@ function canGo(actor, dir) {
 // Redrawing occures inside the onKeyUp function.
 // Apparently, enemies attack each other, too.
 function moveTo(actor, dir) {
- console.log("moveTo " + actor + dir);
+ //console.log("moveTo " + actor + dir);
   // check whether actor can move in the given direction
   if (!canGo(actor, dir))
     return false;
@@ -231,8 +242,8 @@ function moveTo(actor, dir) {
     // if the victim is dead, remove it from the actorMap and actorList
     if (victim.hp <=0 ) {
       actorMap[newKey] = null;
+      floorTiles[actorList.indexOf(victim)] = {x: victim.x, y: victim.y};
       actorList[actorList.indexOf(victim)] = null;
-      floorTiles[victim] = {x: victim.x, y: victim.y};
       // if it was an enemy
       if (victim != player) {
 	livingEnemies--;
@@ -252,7 +263,7 @@ function moveTo(actor, dir) {
     // if the tile was empty:
     // remove reference to the actor's old position
     actorMap[actor.y + '_' + actor.x] = null;
-    floorTiles[actor] = {x: actor.x, y: actor.y};
+    floorTiles[actorList.indexOf(actor)] = {x: actor.x, y: actor.y};
     
     
     // update position
@@ -268,11 +279,7 @@ function moveTo(actor, dir) {
 // Artificial Intelligence part
 function aiAct(actor) {
   var checkMoveTo = 10; // ensures the check loop isn't infinite (in case the actor is surrounded by walls)
-  var directions = [
-    {x: -1, y:  0},
-    {x:  1, y:  0},
-    {x:  0, y: -1},
-    {x:  0, y:  1}];
+
   var dx = player.x - actor.x;
   var dy = player.y - actor.y;
   
@@ -280,9 +287,12 @@ function aiAct(actor) {
   if (Math.abs(dx) + Math.abs(dy) > 6) {// 6 is a purely random number!
     // actor tries to walk in random directions until he succeeds or the counter hits zero
     while (!moveTo(actor, directions[randomInt(directions.length)])
-	    && checkMoveTo > 0)
-    {checkMoveTo--};
-  };
+	    /*&& (checkMoveTo > 0)*/)
+    {
+      //checkMoveTo--
+      
+    };
+  } 
   
   // otherwise, actor moves towards player
   // if the horizontal part of the way is longer than the vertical, actor moves horizontally
@@ -305,6 +315,7 @@ function aiAct(actor) {
     }
   }
   
+  
   // game over condition
   if (player.hp <=0) {
     // display the game over message
@@ -321,7 +332,7 @@ function aiAct(actor) {
 function create() {
   // initialize the keyboard commands
   game.input.keyboard.addCallbacks(null, null, onKeyUp);
-  console.log("function create");
+  //console.log("function create");
   initDisplay();
   // initialize map
   initMap();
@@ -330,6 +341,10 @@ function create() {
   initActors();
   drawActors();
   
+  
+  for (var i in floorTiles) {
+    console.log(floorTiles[i]);
+  };
   
   // initialize screen
   /*
@@ -368,22 +383,41 @@ function onKeyUp(event) {
   var acted = false;
   switch (event.keyCode) {
     case Phaser.Keyboard.LEFT:
-      acted = moveTo(player, {x: -1, y: 0});
+     // acted = moveTo(player, {x: -1, y: 0});
+       acted = moveTo(player, directions[0]);
      // console.log("pressed Phaser.Keyboard.LEFT");
       break;
     case Phaser.Keyboard.RIGHT:
-      acted = moveTo(player, {x: 1, y: 0});
+      acted = moveTo(player,  directions[1]);
      // alert("Pressed Keyboard RIGHT");
       break;
     case Phaser.Keyboard.UP:
-      acted = moveTo(player, {x: 0, y: -1});
+      acted = moveTo(player, directions[2]);
       break;
     case Phaser.Keyboard.DOWN:
-      acted = moveTo(player, {x: 0, y: 1});
+      acted = moveTo(player,  directions[3]);
       break;
   }
-  // if (acted)
+  
+  // if the player made his move, enemies move, too
+   if (acted) {
+     for (var enemy in actorList) {
+       //skip the player
+       if (enemy == 0)
+	 continue;
+       
+       var e = actorList[enemy];
+       if (e != null)
+	 aiAct(e);
+     }
+   }; 
    drawFloorTiles();
+   for (var actor in actorList){
+    console.log("Actor "+ actor + " coordinates");
+   console.log(actorList[actor]);};
+   for (var actor in floorTiles){
+    console.log("Actor " + actor + " floortiles");
+   console.log(floorTiles[actor]);};
    drawActors();
   // render();
 }
