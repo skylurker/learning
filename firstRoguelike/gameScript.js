@@ -18,7 +18,7 @@ var ROWS = 10;
 var COLS = 15;
 
 // number of actors per level (including the player)
-var ACTORS = 2;
+var ACTORS = 7;
 
 // the structure of the map (it is static; once created, it doesn't change)
 var map;
@@ -241,8 +241,8 @@ function moveTo(actor, dir) {
     victim.hp--;
     // if the victim is dead, remove it from the actorMap and actorList
     if (victim.hp <=0 ) {
-      actorMap[newKey] = null;
       floorTiles[actorList.indexOf(victim)] = {x: victim.x, y: victim.y};
+      actorMap[newKey] = null;
       actorList[actorList.indexOf(victim)] = null;
       // if it was an enemy
       if (victim != player) {
@@ -292,7 +292,7 @@ function aiAct(actor) {
       //checkMoveTo--
       
     };
-  } 
+  } else {
   
   // otherwise, actor moves towards player
   // if the horizontal part of the way is longer than the vertical, actor moves horizontally
@@ -314,7 +314,7 @@ function aiAct(actor) {
       moveTo(actor, directions[3]);
     }
   }
-  
+}
   
   // game over condition
   if (player.hp <=0) {
