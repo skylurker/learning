@@ -242,7 +242,7 @@ function moveTo(actor, dir) {
 	  var victory = game.add.text(
 	    game.world.centerX, 
 	    game.world.centerY, 
-	    'You won!\nPress Ctrl + R to restart',
+	    'You won!\nCtrl + R to restart',
 	    {fill : '#2e2', background : '#000', align : 'center'});
 	  victory.anchor.setTo(0.5, 0.5);
 	} // end livingEnemies == 0
@@ -264,6 +264,59 @@ function moveTo(actor, dir) {
   }
   return true;
 }
+
+// Artificial Intelligence part
+function aiAct(actor) {
+  var checkMoveTo = 10; // ensures the check loop isn't infinite (in case the actor is surrounded by walls)
+  var directions = [
+    {x: -1, y:  0},
+    {x:  1, y:  0},
+    {x:  0, y: -1},
+    {x:  0, y:  1}];
+  var dx = player.x - actor.x;
+  var dy = player.y - actor.y;
+  
+  // if player is far away, actor walks randomly
+  if (Math.abs(dx) + Math.abs(dy) > 6) {// 6 is a purely random number!
+    // actor tries to walk in random directions until he succeeds or the counter hits zero
+    while (!moveTo(actor, directions[randomInt(directions.length)])
+	    && checkMoveTo > 0)
+    {checkMoveTo--};
+  };
+  
+  // otherwise, actor moves towards player
+  // if the horizontal part of the way is longer than the vertical, actor moves horizontally
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx < 0) {
+      // left
+      moveTo(actor, directions[0]);
+    } else {
+      // right
+      moveTo(actor, directions[1]);
+    }
+  } else {
+    // if the vertical part of the way is longer than the horizontal, actor moves vertically
+    if (dy < 0) {
+      // up
+      moveTo(actor, directions[2]);
+    } else {
+      // down
+      moveTo(actor, directions[3]);
+    }
+  }
+  
+  // game over condition
+  if (player.hp <=0) {
+    // display the game over message
+    var gameOver = game.add.text(
+	    game.world.centerX, 
+	    game.world.centerY, 
+	    'Game over!\nCtrl + R to restart',
+	    {fill : '#2e2', background : '#000', align : 'center'});
+    gameOver.anchor.setTo(0.5, 0.5); 
+  }
+  
+} // end function aiAct
 
 function create() {
   // initialize the keyboard commands
