@@ -374,10 +374,70 @@ for (var i=0; i<15; i++){
 }*/
 
 /* Second plan of the World */
-console.log(valley.toString());
+/*console.log(valley.toString());
 
-for (var i=0; i<15; i++){
+for (var i=0; i<35; i++){
 	valley.turn();
 	console.log(valley.toString());
+}*/
+
+
+
+/* Exercises: Artificial stupidity
+ * Problems:
+ * 1) Herbivores are greedy. They eat every plant they stumble upon until they have wiped out all the plants.
+ * 2) They move randomly => if there are no plants nearby, they simply die.
+ * 3) They breed very fast. */
+
+function SmartPlantEater() {
+  this.energy = 20;
 }
 
+SmartPlantEater.prototype.act = function(context){
+	var space = context.find(" ");
+	if (this.energy > 100 && space) // To fix 3) Breed very fast
+		return {type: "reproduce", direction: space};
+	var plant = context.find("*");
+	if (this.energy < 20 && plant) // To fix 1) Too greedy
+		return {type: "eat", direction: plant};
+	if (space)
+		return {type: "move", direction: space};
+};
+
+/* To fix 2) Walk Randomly there should probably be some moving strategy.
+ * Since they see only cells that are nearest to them, they can't rely on 
+ * "seeing plants from far away and walking towards them".
+ * Probs it should be something like inheriting from WallFollower
+ * SmartPlantEater.prototype = Object.create(WallFollower.prototype);
+ * I wonder if there's a way to call WallFollower.act there then. Like,
+ * if (this.energy < 40)
+ * return WallFollower.act();
+ */
+
+
+/* Third plan of the World */
+var valley2 = new LifeLikeWorld(
+  ["############################",
+   "#####                 ######",
+   "##   ***                **##",
+   "#   *##**         **  O  *##",
+   "#    ***     O    ##**    *#",
+   "#       O         ##***    #",
+   "#                 ##**     #",
+   "#   O       #*             #",
+   "#*          #**       O    #",
+   "#***        ##**    O    **#",
+   "##****     ###***       *###",
+   "############################"],
+  {"#": Wall,
+   "O": SmartPlantEater,
+   "*": Plant}
+);
+
+/* Third plan of the World */
+console.log(valley2.toString());
+
+for (var i=0; i<35; i++){
+	valley2.turn();
+	console.log(valley2.toString());
+}
