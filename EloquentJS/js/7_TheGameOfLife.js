@@ -395,7 +395,7 @@ function SmartPlantEater() {
 
 SmartPlantEater.prototype.act = function(context){
 	var space = context.find(" ");
-	if (this.energy > 100 && space) // To fix 3) Breed very fast
+	if (this.energy > 80 && space) // To fix 3) Breed very fast
 		return {type: "reproduce", direction: space};
 	var plant = context.find("*");
 	if (this.energy < 20 && plant) // To fix 1) Too greedy
@@ -435,9 +435,58 @@ var valley2 = new LifeLikeWorld(
 );
 
 /* Third plan of the World */
+/*
 console.log(valley2.toString());
 
 for (var i=0; i<35; i++){
 	valley2.turn();
 	console.log(valley2.toString());
+}
+*/
+
+
+function Tiger() {
+  this.energy = 20;
+}
+Tiger.prototype.act = function(context){
+	var space = context.find(" ");
+	if (this.energy > 80 && space) 
+		return {type: "reproduce", direction: space};
+	var herbivore = context.find("O");
+	if (this.energy < 70 && herbivore) 
+		return {type: "eat", direction: herbivore};
+	if (space)
+		return {type: "move", direction: space};
+};
+
+/* Fourth plan of the World */
+var BigValley = new LifeLikeWorld(
+  ["################################################################",
+   "#####      ***       @    ##       O          #          ***####",
+   "##   ***     O  ***                **    ##                 **##",
+   "#   *##**         **  O     **    ##    O         ***        *##",
+   "#    ***     O    ##**      O **  *   ###                   * *#",
+   "#       O         ##           ***         O  O       **#*O    #",
+   "#    * *   @          ##**                    ****      ***    #",
+   "#   O *        #*            ****        *            @ ##**   #",
+   "#*     **     #**              # #       O       #    *     *  #",
+   "#***    **      **    O         * #    *                      *#",
+   "#   O       #*         *     *       #            #   @      O #",
+   "#*          #**               *            O            *  **  #",
+   "#***        ##**    O       ****                              *#",
+   "#    ***     O    ##**      O **  *   ###                   * *#",
+   "##****     ###***            O      ****                 @  *###",
+   "################################################################"],
+  {"#": Wall,
+   "@": Tiger,
+   "O": SmartPlantEater,
+   "*": Plant}
+);
+
+/* Fourth plan of the World */
+console.log(BigValley.toString());
+
+for (var i=0; i<35; i++){
+	BigValley.turn();
+	console.log(BigValley.toString());
 }
