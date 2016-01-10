@@ -56,3 +56,86 @@ conanO'Brien = "It's a-me, Conan O'Brien!" -- it doesn't have parameters
 -- that's a definition (or a name)
 
 -- functions can't begin with uppercase letters
+
+------------
+-- LISTS
+------------
+
+-- a list stores several elements of the same type
+
+-- the 'let' keyword is used to define a name in GHCI.
+-- Doing let a = 1 inside GHCI is the equivalent of 
+-- writing a = 1 in a script and then loading it. 
+
+lostNumbers = [4,8,15,16,23,42]
+
+-- strings are lists of characters
+-- "hello" is just syntactic sugar for ['h','e','l','l','o']
+
+-- concatenation is done using the ++ operator
+-- [1, 2] ++ [3, 4]
+-- "hello" ++ " " ++ "world"
+-- ['w', 'o'] ++ ['o', 't']
+
+-- When you put together two lists (even if you append a singleton 
+-- list to a list, for instance: [1,2,3] ++ [4]), 
+-- internally, Haskell has to walk through the whole list on the 
+-- left side of ++
+
+-- However, putting something at the beginning of a list using 
+-- the : operator (also called the cons operator) is instantaneous. 
+-- 'A':" SMALL CAT" 
+-- 5:[1,2,3,4,5]
+
+-- Notice how : takes a number and a list of numbers or a character 
+-- and a list of characters, whereas ++ takes two lists. Even if you're 
+-- adding an element to the end of a list with ++, you have to surround 
+-- it with square brackets so it becomes a list. 
+
+-- [1,2,3] is actually just syntactic sugar for 1:2:3:[]. 
+-- Note: [], [[]] and[[],[],[]] are all different things.
+
+-- get an element out of a list by index
+-- "Steve Buscemi" !! 6
+-- [9.4,33.2,96.2,11.2,23.25] !! 1  
+
+b = [[1,2,3,4],[5,3,3,3],[1,2,2,3,4],[1,2,3]]
+-- b ++ [[1,1,1,1]]
+-- [6,6,6]:b
+-- b !! 2
+
+--The lists within a list can be of different 
+-- lengths but they can't be of different types
+
+-- Lists can be compared if the stuff they contain can be compared. 
+-- When using <, <=, > and >= to compare lists, they are 
+-- compared in lexicographical order.
+
+--     ghci> [3,2,1] > [2,1,0]  
+--    True  
+--    ghci> [3,2,1] > [2,10,100]  
+--    True  
+--    ghci> [3,4,2] > [3,4]  
+--   True  
+--   ghci> [3,4,2] > [2,4]  
+--    True  
+--    ghci> [3,4,2] == [3,4,2]  
+--    True  
+
+-- other operations on the lists:
+-- head: returns first element
+-- tail: returns the list without head
+-- last: returns last element
+-- init: returns the list without last element
+-- These don't work on empty lists!
+-- length
+-- null: checks if the list is empty; Use this function instead of xs == []
+-- reverse
+-- take: takes that many elements from the beginning of the list
+-- drop: the same, but drops the number of elements from the beginning of a list
+-- maximum: takes a list of stuff that can be put in some kind of order and returns the biggest element
+-- minimum: returns the smallest
+-- sum: takes a list of numbers and returns their sum
+-- product: takes a list of numbers and returns their product
+-- elem:  takes a thing and a list of things and tells us if that thing is an element of the list
+-- (infix variant: 4 `elem` [3,4,5,6] returns True)
