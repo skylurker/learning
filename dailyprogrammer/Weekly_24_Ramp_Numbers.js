@@ -32,3 +32,15 @@ function rampNumbers(n){
 function isRamp2(number){
   return number.toString() == number.toString().split('').sort().join(''); // obligatory quote marks in join('') !! otherwise it's 123 -> 1,2,3
 }
+
+/* 3. 1 & 2 combined into one */
+// as in https://www.reddit.com/r/dailyprogrammer/comments/3o4tpz/weekly_24_mini_challenges/cvun45r
+function rampNumbers2(n){
+  for (var i = 0, count = 0; i < n; i++)
+        if (i == ('' + i).split('').sort().join('')) count++;
+    return count;
+}
+
+
+console.log(rampNumbers2(input));
+console.log(rampNumbers2(challengeInput));
