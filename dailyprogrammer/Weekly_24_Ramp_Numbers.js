@@ -18,7 +18,7 @@ function isRamp(number) {
 function rampNumbers(n){
   cnt = 0;
     for (i=0; i<n; i++) {
-      if (isRamp(i)==true) cnt++;   
+      if (isRamp(i)==true) cnt++;   // to use Solution 2, change isRamp to isRamp2
     }
   console.log("Total ramp numbers: " + cnt);
 }
@@ -26,4 +26,9 @@ function rampNumbers(n){
  rampNumbers(input);
  rampNumbers(challengeInput);
 
-
+/* 2. isRamp modified */
+// similar to this solution
+// https://www.reddit.com/r/dailyprogrammer/comments/3o4tpz/weekly_24_mini_challenges/cvum9p8
+function isRamp2(number){
+  return number.toString() == number.toString().split('').sort().join(''); // obligatory quote marks in join('') !! otherwise it's 123 -> 1,2,3
+}
