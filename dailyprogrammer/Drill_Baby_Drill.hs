@@ -24,3 +24,15 @@ spaces str = length [ x | x <- str, x == ' ']
 main = do
     input <- getLine
     print $ spaces input
+
+-----------
+
+-- HASKELL
+-- https://www.reddit.com/r/dailyprogrammer_ideas/comments/4d5ehh/easy_drill_baby_drill/
+-- Remove all of the vowels in a string
+
+removed str = filter (`notElem` "aeiuo") str
+
+main = do
+    input <- getLine
+    print $ removed input
