@@ -48,3 +48,15 @@ less str = [ s | s <- words str, length s < 4]
 main = do
     input <- getLine
     print $ less input
+
+---------
+
+-- HASKELL
+-- https://www.reddit.com/r/dailyprogrammer_ideas/comments/4d5ehh/easy_drill_baby_drill/
+-- Count the length of each word in a sentence.
+
+cnt str = [ length s | s <- words str ]
+
+main = do
+    input <- getLine
+    print $ cnt input
