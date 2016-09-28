@@ -60,3 +60,14 @@ cnt str = [ length s | s <- words str ]
 main = do
     input <- getLine
     print $ cnt input
+
+--------
+
+-- HASKELL
+-- https://www.reddit.com/r/dailyprogrammer_ideas/comments/4d5ehh/easy_drill_baby_drill/
+-- Find all of the numbers from 1-1000 that have a 3 in them
+
+hasThree n = '3' `elem` (show n)
+haveThree = [x | x <- [1..1000], hasThree x == True]
+
+main = mapM_ print haveThree
