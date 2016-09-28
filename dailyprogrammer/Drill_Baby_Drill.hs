@@ -36,3 +36,15 @@ removed str = filter (`notElem` "aeiuo") str
 main = do
     input <- getLine
     print $ removed input
+
+--------
+
+-- HASKELL
+-- https://www.reddit.com/r/dailyprogrammer_ideas/comments/4d5ehh/easy_drill_baby_drill/
+-- Find all of the words in a string that are less than 4 letters
+
+less str = [ s | s <- words str, length s < 4]
+
+main = do
+    input <- getLine
+    print $ less input
