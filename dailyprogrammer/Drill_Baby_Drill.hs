@@ -71,3 +71,18 @@ hasThree n = '3' `elem` (show n)
 haveThree = [x | x <- [1..1000], hasThree x == True]
 
 main = mapM_ print haveThree
+
+
+--------
+
+-- HASKELL
+-- https://www.reddit.com/r/dailyprogrammer_ideas/comments/4d5ehh/easy_drill_baby_drill/
+-- NOT FINISHED
+--Find all of the numbers from 1-1000 that are divisible by any single digit besides 1 (2-9)
+divisibleBy n1 n2 = n1 `mod` n2 == 0
+divisibleByRange = do ...............
+
+
+areDivisible = [ x | x <- [1..1000], x `divisibleBy` [2..9] == True ]
+-- what's this
+main = print $ 15 `divisibleBy` 15
