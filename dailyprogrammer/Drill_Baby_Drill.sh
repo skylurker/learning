@@ -63,3 +63,16 @@ grep -o " " <<<"$S" | wc -l
 # Y is counted as consonant
 S="believE and cArry on"
 echo ${S//[aeiouAEIOU]}
+
+##############
+
+#!/bin/bash
+# https://www.reddit.com/r/dailyprogrammer_ideas/comments/4d5ehh/easy_drill_baby_drill/
+# Find all of the words in a string that are less than 4 letters
+input="believE and cArry on"
+words=( $input )
+for word in ${words[@]}; do
+    if [ ${#word} -lt 4 ];
+    then echo ${word}
+    fi
+done
