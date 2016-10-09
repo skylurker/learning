@@ -54,3 +54,12 @@ grep -o " " <<<"$S" | wc -l
 # must be some input/output redirect stuff, I guess
 # HEY found it, it's HERE STRING
 # https://linux.die.net/abs-guide/x15683.html
+
+##############
+
+#!/bin/bash
+# https://www.reddit.com/r/dailyprogrammer_ideas/comments/4d5ehh/easy_drill_baby_drill/
+# Remove all of the vowels in a string
+# Y is counted as consonant
+S="believE and cArry on"
+echo ${S//[aeiouAEIOU]}
