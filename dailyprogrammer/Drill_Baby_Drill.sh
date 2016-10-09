@@ -43,3 +43,14 @@ S="to be be"
 # replace all occurences of non-space character with an empty substring
 spaces="${S//[^ ]}"
 echo "${#spaces}"
+
+# grep way
+grep -o " " <<<"$S" | wc -l
+# grep -o stands for -only-matching
+# that means it prints only the words that match teh pattern,
+# not the lines where an occurence was found
+# wc -l counts lines (hence -l)
+# I have no idea what <<< does though
+# must be some input/output redirect stuff, I guess
+# HEY found it, it's HERE STRING
+# https://linux.die.net/abs-guide/x15683.html
