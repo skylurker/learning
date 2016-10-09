@@ -76,3 +76,13 @@ for word in ${words[@]}; do
     then echo ${word}
     fi
 done
+
+#############
+#!/bin/bash
+# https://www.reddit.com/r/dailyprogrammer_ideas/comments/4d5ehh/easy_drill_baby_drill/
+# Count the length of each word in a sentence
+input="believE and cArry on"
+words=( $input )
+for word in ${words[@]}; do
+        echo ${#word}
+done
