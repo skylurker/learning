@@ -1,9 +1,11 @@
+# This file contains several programs for the same challenge entry (since there are sub-challenges).
+# These mini-programs should be executed separately.
+
+
+
 #!/bin/bash
 # https://www.reddit.com/r/dailyprogrammer_ideas/comments/4d5ehh/easy_drill_baby_drill/
 # BASH scripts
-
-# This file contains several programs for the same challenge entry (since there are sub-challenges).
-# These mini-programs should be executed separately.
 
 # September 29, 2016
 # Find all of the numbers from 1-1000 that are divisible by 7
@@ -16,6 +18,7 @@ while [ $COUNT -le 1000 ]; do
 done
 
 ##########
+# September 30 2016
 
 #!/bin/bash
 # https://www.reddit.com/r/dailyprogrammer_ideas/comments/4d5ehh/easy_drill_baby_drill/
@@ -28,3 +31,15 @@ until [ $COUNT -gt 1000 ]; do
     fi
     COUNT=$((COUNT+1))
 done
+
+###########
+
+#!/bin/bash
+# Count the number of spaces in a string
+S="to be be"
+# bash only
+# idea from
+# http://www.cyberciti.biz/faq/unix-linux-appleosx-bsd-bash-count-characters-variables/
+# replace all occurences of non-space character with an empty substring
+spaces="${S//[^ ]}"
+echo "${#spaces}"
