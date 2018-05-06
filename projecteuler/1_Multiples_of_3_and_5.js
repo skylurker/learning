@@ -18,3 +18,12 @@ function sumOfMultiples(limit){
 
 console.log(sumOfMultiples(10));
 console.log(sumOfMultiples(1000));
+
+
+function sumOfMultiples2(limit){
+	// generate an array https://stackoverflow.com/a/39924913
+	return Array.from(Array(limit).keys()).filter(x => ((x % 3 == 0 || x % 5 == 0))).reduce((a, b) => a + b);
+}
+
+console.log(sumOfMultiples2(10));
+console.log(sumOfMultiples2(1000));
